@@ -4,11 +4,12 @@ use std::io::Write;
 use std::mem;
 use std::path::PathBuf;
 use std::sync::Mutex;
-use tauri::utils::config;
+
+const SETTINGS_FILENAME: &str = "settings.json";
 
 #[cfg(target_os = "windows")]
 fn get_config_root() -> PathBuf {
-    let appdata = PathBuf::from(std::env::var("APPDAT").unwrap());
+    let appdata = PathBuf::from(std::env::var("APPDATA").unwrap());
     appdata.join("takanori").join("myapp")
 }
 
@@ -20,7 +21,7 @@ fn get_config_root() -> PathBuf {
 
 trait Config {
     fn write_file(&self) {}
-    fn read_file(&mut self) -> Self;
+    fn read_file(&mut self) {}
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -33,46 +34,52 @@ impl Default for Settings {
     fn default() -> Self {
         Self {
             language: "en".to_string(),
-            theme: "jp".to_string(),
+            theme: "dark".to_string(),
         }
     }
 }
 
 impl Config for Settings {
     fn write_file(&self) {
-        let config_file = get_config_root().join("settings.json");
+        let config_file = get_config_root().join(SETTINGS_FILENAME);
+        if !config_file.parent().unwrap().exists() {
+            fs::create_dir(config_file.parent().unwrap()).unwrap();
+        }
         let serialized = serde_json::to_string(self).unwrap();
-        let mut file = fs::File::create(&config_file).unwrap();
-        file.write_all(serialized.as_bytes()).unwrap();
+        let mut file = fs::File::create(config_file).unwrap();
+        file.write_all(&serialized.as_bytes()).unwrap();
     }
 
-    fn read_file(&mut self) -> Settings {
-        let config_file = get_config_root().join("settings.json");
-        let input = fs::read_to_string(&config_file).unwrap();
-        let deserialized: Settings = serde_json::from_str(&input).unwrap();
-
-        deserialized
+    fn read_file(&mut self) {
+        let config_file = get_config_root().join(SETTINGS_FILENAME);
+        let input = fs::read_to_string(config_file).unwrap();
+        let deserialized: Self = serde_json::from_str(&input).unwrap();
+        let _ = mem::replace(self, deserialized);
     }
 }
 
 impl Settings {
     pub fn new() -> Self {
-        let config_file = get_config_root().join("settings.json");
+        let config_file = get_config_root().join(SETTINGS_FILENAME);
         if !config_file.exists() {
-            return Self::default();
+            Self::default()
         } else {
-            return Self::default().read_file();
+            let mut settings = Self::default();
+            settings.read_file();
+            settings
         }
     }
 
     pub fn set_language(&mut self, new_lang: String) {
         self.language = new_lang;
         self.write_file();
+        println!("{:?}", self);
     }
 
     pub fn set_theme(&mut self, new_theme: String) {
         self.theme = new_theme;
         self.write_file();
+        println!("{:?}", self);
     }
 }
 
@@ -97,7 +104,8 @@ pub mod commands {
         state: tauri::State<'_, AppState>,
         new_language: String,
     ) -> Result<(), String> {
-        state.settings.lock().unwrap().set_language(new_language);
+        let mut settings = state.settings.lock().unwrap();
+        settings.set_language(new_language);
         Ok(())
     }
 
@@ -106,7 +114,8 @@ pub mod commands {
         state: tauri::State<'_, AppState>,
         new_theme: String,
     ) -> Result<(), String> {
-        state.settings.lock().unwrap().set_theme(new_theme);
+        let mut settings = state.settings.lock().unwrap();
+        settings.set_theme(new_theme);
         Ok(())
     }
 
