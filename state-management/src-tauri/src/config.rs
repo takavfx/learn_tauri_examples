@@ -43,7 +43,7 @@ impl Config for Settings {
     fn write_file(&self) {
         let config_file = get_config_root().join(SETTINGS_FILENAME);
         if !config_file.parent().unwrap().exists() {
-            fs::create_dir(config_file.parent().unwrap()).unwrap();
+            fs::create_dir_all(config_file.parent().unwrap()).unwrap();
         }
         let serialized = serde_json::to_string(self).unwrap();
         let mut file = fs::File::create(config_file).unwrap();
