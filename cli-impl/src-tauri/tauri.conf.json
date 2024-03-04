@@ -6,7 +6,7 @@
     "distDir": "../build"
   },
   "package": {
-    "productName": "cli-impl",
+    "productName": "myapp",
     "version": "0.1.0"
   },
   "tauri": {
@@ -28,7 +28,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "abc.takanorikishikawa.dev",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -57,9 +57,21 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "cli-impl",
+        "title": "myapp",
         "width": 800
       }
-    ]
+    ],
+    "cli": {
+      "description": "Examples for cli implimentation in Tauri",
+      "beforeHelp": "aaa",
+      "afterHelp": "bbb",
+      "args": [{
+        "name": "theme",
+        "short": "t",
+        "multiple": false,
+        "possibleValues": ["dark", "light"],
+        "description": "Select theme as app is launched."
+      }]
+    }
   }
 }
