@@ -8,7 +8,7 @@
 	};
 	let count = 0;
 
-	listen('count_event', (event) => {
+	$: listen('count_event', (event) => {
 		let payload = event.payload as Payload;
 		count = payload.count;
 	});
@@ -17,7 +17,7 @@
 <Button class="relative" size="sm">
 	<EnvelopeSolid class="text-white dark:text-white" />
 	<span class="sr-only">Notifications</span>
-	<Indicator color="blue" border size="xl" placement="top-right" class="text-xs font-bold"
-		>{count}</Indicator
-	>
+	<Indicator color="blue" border size="xl" placement="top-right" class="text-xs font-bold">
+		{count}
+	</Indicator>
 </Button>
