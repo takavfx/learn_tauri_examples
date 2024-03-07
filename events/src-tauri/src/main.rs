@@ -1,13 +1,9 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use serde::Serialize;
-use tauri::Manager;
+use std::env;
 
-#[derive(Clone, Serialize)]
-struct Payload {
-    message: String,
-}
+use tauri::Manager;
 
 fn main() {
     tauri::Builder::default()
@@ -16,7 +12,15 @@ fn main() {
                 println!("got `click` event with payload {:?}", event.payload());
             });
 
-            app.unlisten(id);
+            match env::var("TAURI_UNLISTEN") {
+                Ok(val) => {
+                    let value: u8 = val.parse().unwrap();
+                    if value == 1 {
+                        app.unlisten(id);
+                    }
+                }
+                Err(_err) => (),
+            }
 
             Ok(())
         })
