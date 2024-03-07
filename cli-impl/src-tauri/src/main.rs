@@ -5,7 +5,7 @@ mod config;
 
 use std::collections::HashMap;
 
-use tauri::{api::cli::ArgData, Manager};
+use tauri::{api::cli::ArgData, Manager, State};
 use tauri_plugin_log::LogTarget;
 
 use config::Settings;
@@ -32,8 +32,21 @@ fn main() {
             match app.get_cli_matches() {
                 Ok(matches) => {
                     println!("{:?}", matches);
-                    // let mut settings = app_state.settings.lock().unwrap();
-                    // app.state()<AppState>
+
+                    let new_theme = matches
+                        .args
+                        .get("theme")
+                        .clone()
+                        .expect("theme is not set.");
+
+                    match new_theme {
+                        None => None,
+                        Some(x) => {
+                            let app_sate: State<'_, AppState> = app.state();
+                            let mut settings = app_sate.settings.lock().unwrap();
+                            settings.set_theme(*x.value);
+                        }
+                    }
                 }
                 Err(_) => {}
             }
