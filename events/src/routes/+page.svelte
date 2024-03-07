@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { emit, listen } from '@tauri-apps/api/event';
-	import { appWindow, WebviewWindow } from '@tauri-apps/api/window';
-
-	// appWindow.emit('event', { message: 'Tauri is awsome!' });
-
-	async function onClicked() {
-		// const unlisten = await listen('click', (event) => console.log(event));
-		emit('click', { theMessage: 'Tauri is awsome!' });
-	}
+	import { Tabs, TabItem } from 'flowbite-svelte';
+	import ClickEvent from '$lib/components/ClickEvent.svelte';
+	import CountEvent from '$lib/components/CountEvent.svelte';
 </script>
 
-<button on:click={onClicked}>Hello</button>
+<Tabs>
+	<TabItem open title="Click">
+		<ClickEvent />
+	</TabItem>
+	<TabItem title="Count">
+		<CountEvent />
+	</TabItem>
+</Tabs>
