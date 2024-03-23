@@ -7,7 +7,7 @@
   },
   "package": {
     "productName": "myapp",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "tauri": {
     "allowlist": {
@@ -63,15 +63,16 @@
     ],
     "cli": {
       "description": "Examples for cli implimentation in Tauri",
-      "beforeHelp": "aaa",
-      "afterHelp": "bbb",
-      "args": [{
-        "name": "theme",
-        "short": "t",
-        "multiple": false,
-        "possibleValues": ["dark", "light"],
-        "description": "Select theme as app is launched."
-      }]
+      "beforeHelp": "Welcome to myapp!!",
+      "afterHelp": "Takanori Kishikawa, All rights reserved.",
+      "args": [
+        {
+            "name": "dark",
+            "takesValue": false,
+            "multiple": false,
+            "description": "Set theme to dark mode as launched."
+        }
+      ]
     }
   }
 }

@@ -27,7 +27,7 @@ fn main() {
                         app.unlisten(id);
                     }
                 }
-                Err(_err) => (),
+                _ => (),
             }
 
             // Count Event ==========

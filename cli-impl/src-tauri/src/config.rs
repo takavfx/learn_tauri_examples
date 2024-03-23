@@ -4,24 +4,18 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Settings {
-    theme: String,
+    dark_mode: bool,
 }
 
 impl Default for Settings {
     fn default() -> Self {
-        Self {
-            theme: "light".to_string(),
-        }
+        Self { dark_mode: false }
     }
 }
 
 impl Settings {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
-    pub fn set_theme(&mut self, new_theme: String) {
-        self.theme = new_theme;
+    pub fn set_dark_mode(&mut self, switch: bool) {
+        self.dark_mode = switch;
     }
 }
 
@@ -43,14 +37,17 @@ pub mod commands {
 
     // remember to call `.manage(MyState::default())`
     #[tauri::command]
-    async fn set_theme(state: tauri::State<'_, AppState>, new_theme: String) -> Result<(), String> {
-        let mut settings = state.settings.lock().unwrap();
-        settings.set_theme(new_theme);
+    pub async fn set_dark_mode(
+        state: tauri::State<'_, AppState>,
+        switch: bool,
+    ) -> Result<(), String> {
+        let mut settings: std::sync::MutexGuard<'_, Settings> = state.settings.lock().unwrap();
+        settings.set_dark_mode(switch);
         Ok(())
     }
 
     #[tauri::command]
-    async fn get_settings(state: tauri::State<'_, AppState>) -> Result<Settings, String> {
+    pub async fn get_settings(state: tauri::State<'_, AppState>) -> Result<Settings, String> {
         let settings = state.settings.lock().unwrap().clone();
         Ok(settings)
     }
