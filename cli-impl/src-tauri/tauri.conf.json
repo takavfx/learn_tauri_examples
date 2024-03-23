@@ -70,9 +70,26 @@
             "name": "dark",
             "takesValue": false,
             "multiple": false,
-            "description": "Set theme to dark mode as launched."
+            "description": "Set theme to dark mode as launched.",
+            "possibleValues": []
+            
         }
-      ]
+      ],
+      "subcommands": {
+        "run": {
+          "args": [
+            {"name": "start", "takesValue": false},
+            {"name": "dev", "takesValue": false}
+          ]
+        },
+        "search": {
+          "subcommands": {
+            "google": {"args": [{"name": "word", "short": "w"}]},
+            "bing": {"args": [{"name": "word", "short": "w"}]},
+            "yahoo": {"args": [{"name": "word", "short": "w"}]}
+          }
+        }
+      }
     }
   }
 }
