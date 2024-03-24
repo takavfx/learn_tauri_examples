@@ -1,5 +1,9 @@
 # Tauri Events Example
 
+![](doc/images/image.gif)
+![](doc/images/image2.gif)
+
+
 ## Developing
 
 ```bash
