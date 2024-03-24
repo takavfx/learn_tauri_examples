@@ -1,6 +1,8 @@
 # autostart
 
-Example of Autostart implementation to Tauri
+Example of Autostart implementation to Tauri.
+
+![](doc/images/autostart_rdhi8hkr7U.png)
 
 ## Developing
 
