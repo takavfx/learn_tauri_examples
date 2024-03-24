@@ -2,6 +2,9 @@
 
 Example of CLI function implementation to Tauri
 
+![](doc/images/WindowsTerminal_Aa8ikr0a1M.png)
+![](doc/images/WindowsTerminal_qngKshD6fT.png)
+
 ## Developing
 
 ```bash
