@@ -70,9 +70,20 @@
             "name": "dark",
             "takesValue": false,
             "multiple": false,
-            "description": "Set theme to dark mode as launched.",
-            "possibleValues": []
-            
+            "description": "Set theme to dark mode as launched."
+        },
+        {
+          "name": "nogui",
+          "takesValue": false,
+          "multiple": false,
+          "description": "No GUI mode."
+        },
+        {
+          "name": "features",
+          "takesValue": true,
+          "multiple": true,
+          "description": "Enable features, available in the past and the future. Not in current.",
+          "possibleValues": ["legacy", "future"]
         }
       ],
       "subcommands": {
