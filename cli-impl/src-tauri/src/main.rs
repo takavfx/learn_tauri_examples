@@ -64,7 +64,7 @@ fn main() {
                     let mut is_only_gui = false;
                     for &key in matches.args.keys() {
                         if let Some(&value) = matches.args.get(key.as_str()) {
-                            match value.type_id() {
+                            match value {
                                 Bool => {
                                     if value == true {
                                         is_only_gui = false;
@@ -75,23 +75,25 @@ fn main() {
                             }
                         }
                     }
+
                     if is_only_gui {
                         unsafe {
                             AllocConsole();
                         }
-                    }
-
-                    // --dark 時の処理
-                    if let Some(x) = matches.args.get("dark").clone() {
-                        let app_state: State<'_, AppState> = app.state();
-                        debug!("{:?}", app_state.settings.lock().unwrap());
-                        let mut settings = app_state.settings.lock().unwrap();
-                        settings
-                            .set_dark_mode(x.value.as_bool().expect("The value is not bool type."));
-                        debug!("{:?}", settings);
                     } else {
-                        unsafe {
-                            AllocConsole();
+                        // --dark 時の処理
+                        if let Some(x) = matches.args.get("dark").clone() {
+                            let app_state: State<'_, AppState> = app.state();
+                            debug!("{:?}", app_state.settings.lock().unwrap());
+                            let mut settings = app_state.settings.lock().unwrap();
+                            settings.set_dark_mode(
+                                x.value.as_bool().expect("The value is not bool type."),
+                            );
+                            debug!("{:?}", settings);
+                        } else {
+                            unsafe {
+                                AllocConsole();
+                            }
                         }
                     }
                 }
